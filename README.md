@@ -1,2 +1,2 @@
-# binary-search-tree
-binary search tree related things
+# binary-search-binaryTree
+binary search binaryTree related things
