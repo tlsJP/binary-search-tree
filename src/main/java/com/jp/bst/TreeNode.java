@@ -5,14 +5,15 @@ package com.jp.bst;
  */
 public interface TreeNode<T> {
 
+    TreeNode getLeft();
+
+    TreeNode getRight();
+
     Comparable<T> getValue();
 
-    TreeNode<T> getLeft();
+    void setLeft(TreeNode t);
 
-    TreeNode<T> getRight();
+    void setRight(TreeNode t);
 
-    void setLeft(TreeNode<T> t);
-
-    void setRight(TreeNode<T> t);
 
 }
