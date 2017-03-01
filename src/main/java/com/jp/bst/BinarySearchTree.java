@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by JP on 2/27/2017.
  */
-public class BinarySearchTree implements Tree {
+public class BinarySearchTree implements BinaryTree {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BinarySearchTree.class);
 
@@ -71,6 +71,11 @@ public class BinarySearchTree implements Tree {
     public TreeNode search(Comparable target) {
         LOGGER.info("search({})", target);
         return doSearch(root, target);
+    }
+
+    @Override
+    public TreeNode getRoot() {
+        return root;
     }
 
 

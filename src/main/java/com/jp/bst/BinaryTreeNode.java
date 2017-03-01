@@ -39,4 +39,9 @@ public class BinaryTreeNode implements TreeNode {
         this.right = right;
     }
 
+    @Override
+    public String toString(){
+        return value.toString();
+    }
+
 }
