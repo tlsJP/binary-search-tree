@@ -1,42 +1,31 @@
-package com.jp.bst.com.jp.bst.search;
+package com.jp.bst.bfs;
 
-import com.jp.bst.Tree;
+import com.jp.bst.BinaryTree;
 import com.jp.bst.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
 import java.util.Queue;
-import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.stream.Collectors;
 
 /**
+ * Recursive implementation for breadth-first
+ * <p>
  * Created by JP on 2/28/2017.
  */
-public class BreadthFirstSearch implements Tree {
+public class BreadthFirstSearch {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BreadthFirstSearch.class);
 
-    private Tree tree;
-
-    private Set<TreeNode> visitedNodes;
-    private Queue<TreeNode> uncheckedNodes;
-
-    public BreadthFirstSearch(Tree tree) {
-        this.tree = tree;
-        // TODO - Tree that can report number of nodes so i can do something like tree.size() or w/e
-        uncheckedNodes = new ArrayBlockingQueue(10);
-        visitedNodes = new HashSet<>(10);
-    }
+    private Stack<TreeNode> visitedNodes = new Stack<>();
+    private Queue<TreeNode> uncheckedNodes = new ArrayBlockingQueue<>(100);
 
     private TreeNode doSearch(TreeNode root, Comparable target) {
 
-//        uncheckedNodes.add(root);
-        uncheckedNodes.add(root.getLeft());
-        uncheckedNodes.add(root.getRight());
-
-        LOGGER.info("Current Queue : [" + uncheckedNodes.stream().map(Object::toString).collect(Collectors.joining(",")) + "]");
+        // We're here now, so we've visited
+        visitedNodes.add(root);
 
         Comparable currentValue = root.getValue();
         LOGGER.info("Current value :  {}", currentValue);
@@ -44,25 +33,33 @@ public class BreadthFirstSearch implements Tree {
             return root;
         }
 
-        return doSearch(uncheckedNodes.poll(), target);
+        if (root.getLeft() != null) {
+            uncheckedNodes.add(root.getLeft());
+        }
+
+        if (root.getRight() != null) {
+            uncheckedNodes.add(root.getRight());
+        }
+
+        LOGGER.info("Current Queue : [" + uncheckedNodes.stream().map(Object::toString).collect(Collectors.joining(",")) + "]");
+
+        // Time to pop off!
+        TreeNode checkNext = uncheckedNodes.poll();
+        return checkNext == null ? null : doSearch(checkNext, target);
 
     }
 
-    @Override
-    public TreeNode getRoot() {
-        return null;
-    }
-
-    @Override
-    public void insert(Comparable target) {
-        throw new UnsupportedOperationException("lol rip xd");
-    }
-
-    @Override
-    public TreeNode search(Comparable target) {
+    public TreeNode search(BinaryTree tree, Comparable target) {
+        LOGGER.info("search({})",target);
         uncheckedNodes.clear();
+        visitedNodes.clear();
 
-        return doSearch(tree.getRoot(), target);
+        TreeNode result = doSearch(tree.getRoot(), target);
 
+        // Summary of what happaned
+        LOGGER.info("Traversal breadcrumb : " + visitedNodes.stream().map(Object::toString).collect(Collectors.joining(" > ")));
+        LOGGER.info("Remaining unchecked nodes : [" + uncheckedNodes.stream().map(Object::toString).collect(Collectors.joining(",")) + "]");
+
+        return result;
     }
 }
