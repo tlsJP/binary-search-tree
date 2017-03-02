@@ -27,10 +27,10 @@ public class BinarySearchTree implements BinaryTree {
         LOGGER.info("Current value is : {} ", currentValue);
 
         if (target.compareTo(currentValue) < 0) {
-            LOGGER.info("Adding left leaf...");
+            LOGGER.debug("Adding left leaf...");
             root.setLeft(doInsert(root.getLeft(), target));
         } else {
-            LOGGER.info("Adding right leaf...");
+            LOGGER.debug("Adding right leaf...");
             root.setRight(doInsert(root.getRight(), target));
         }
 
