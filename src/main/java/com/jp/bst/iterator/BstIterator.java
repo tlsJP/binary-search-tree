@@ -10,15 +10,11 @@ import java.util.*;
 /**
  * In a binary search tree, return an iterator over the values of the node in order.
  * For example, in this binary search tree:
- * 3
- * / \
- * 1  4
- * / \
- * 0  2
- * <p>
- * 6
- * /\
- * 5  7
+ * .........3
+ * ......../ \
+ * .......1  4
+ * ....../ \
+ * ......0  2
  * <p>
  * The returned iterator should iterator over the values in order: 0, 1, 2, 3, 4.
  */
@@ -29,7 +25,7 @@ public class BstIterator implements Iterator<TreeNode> {
     private TreeNode node;
 
     private Stack<TreeNode> stack = new Stack<>();
-    private Set<TreeNode> visited = new HashSet<>();
+    private Set<TreeNode> visited = new LinkedHashSet<>();
 
     public BstIterator(BinaryTreeNode root) {
         this.node = root;
@@ -39,7 +35,6 @@ public class BstIterator implements Iterator<TreeNode> {
 
     @Override
     public boolean hasNext() {
-
         return !stack.isEmpty() || node != null;
 
     }
@@ -51,7 +46,7 @@ public class BstIterator implements Iterator<TreeNode> {
         printStack();
 
 
-        TreeNode forReturn;
+        TreeNode forReturn = null;
 
         // Traverse left
         TreeNode left = node.getLeft();
@@ -60,56 +55,52 @@ public class BstIterator implements Iterator<TreeNode> {
             logger.info("pushing left val {}", left.getValue());
             printStack();
             left = left.getLeft();
+
+            // We've hit the bottom-left branch
+            if (left == null) {
+                forReturn = stack.pop();
+                visited.add(forReturn);
+                printStack();
+                logger.info("returning {}", forReturn);
+
+                node = stack.pop();
+                printStack();
+
+                return forReturn;
+            }
         }
 
+        // Return the left-most leaf
         if (left == null) {
             forReturn = stack.pop();
             visited.add(forReturn);
             printStack();
-            logger.info("returning {}", forReturn);
-
-            if (!stack.empty()) {
-                node = stack.pop();
-                printStack();
-            }
-
-            return forReturn;
         }
 
-
-        // We're at a leaf node
-        if (node.getLeft() == null && node.getRight() == null) {
-            forReturn = stack.pop();
-            visited.add(forReturn);
-            node = stack.pop();
-            return forReturn;
+        // Return the current node
+        if (forReturn == null) {
+            forReturn = node;
+            visited.add(node);
         }
 
-
-        // We'll be returning this node
-        forReturn = node;
-        visited.add(node);
-
-        // return right
-        if (node.getRight() != null) {
-            logger.info("pushing right val {}", node.getRight().getValue());
-            stack.push(node.getRight());
-            node = node.getRight();
-            printStack();
-
-        } else {
-//            stack.pop();
-            node = stack.pop();
+        // Add the right node to the stack
+        if (forReturn.getRight() != null) {
+            stack.push(forReturn.getRight());
+            node = forReturn.getRight();
         }
 
-        // return this
+        // If the stack is empty, we've exhausted the whole tree
+        if (stack.empty()) {
+            node = null;
+        }
+
         logger.info("returning {}", forReturn);
         logger.info("visited : {}", visited);
         return forReturn;
 
     }
 
-    void printStack() {
+    private void printStack() {
         logger.info("Current stack : {}", Arrays.toString(stack.toArray()));
     }
 }
