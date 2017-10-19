@@ -24,15 +24,16 @@ public class BinarySearchTree implements BinaryTree {
         }
 
         Comparable currentValue = root.getValue();
-        LOGGER.info("Current value is : {} ", currentValue);
+        LOGGER.debug("Current value is : {} ", currentValue);
 
         if (target.compareTo(currentValue) < 0) {
-            LOGGER.debug("Adding left leaf...");
+            LOGGER.info("Adding left leaf...");
             root.setLeft(doInsert(root.getLeft(), target));
         } else {
-            LOGGER.debug("Adding right leaf...");
+            LOGGER.info("Adding right leaf...");
             root.setRight(doInsert(root.getRight(), target));
         }
+
 
         return root;
     }
@@ -45,7 +46,7 @@ public class BinarySearchTree implements BinaryTree {
         }
 
         Comparable currentValue = root.getValue();
-        LOGGER.info("Current value is : {} ", currentValue);
+        LOGGER.debug("Current value is : {} ", currentValue);
 
         // Use equals() because it's better than compareTo() == 0
         if (currentValue.equals(target)) {
