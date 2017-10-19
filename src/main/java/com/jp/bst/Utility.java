@@ -29,6 +29,16 @@ public final class Utility {
         return bst;
     }
 
+    public static BinaryTree createSimpleTree(){
+        BinarySearchTree bst = new BinarySearchTree(new BinaryTreeNode(3));
+        bst.insert(1);
+        bst.insert(4);
+        bst.insert(0);
+        bst.insert(2);
+
+        return bst;
+    }
+
     public static BinaryTree createStupidTree(){
 
 
